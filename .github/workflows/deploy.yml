@@ -31,8 +31,8 @@ jobs:
       - name: Deploy to Netlify
         uses: South-Paw/action-netlify-deploy@v1.2.0
         with:
-          deploy-dir: ./                         # Directory with static site content
-          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }} # Auth token from Netlify
-          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}       # Site ID from Netlify
-          production-deploy: true                    # Deploy to production environment
-          publish-branch: main                       # Branch to deploy from
+          github-token: ${{ secrets.GITHUB_TOKEN }}             # ✅ Required built-in token
+          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }} # ✅ From Netlify (set in GitHub Secrets)
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}       # ✅ From Netlify (set in GitHub Secrets)
+          build-dir: ./                                         # ✅ Your static site's output folder
+          github-deployment-is-production: true                 # ✅ Mark this as production
