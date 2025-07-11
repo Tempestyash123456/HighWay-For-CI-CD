@@ -1,5 +1,11 @@
-name: CI/CD Pipeline for Static Site
+# ======================================================================
+# 📦 GitHub Actions Workflow: CI/CD for Static Website to Netlify
+# This workflow triggers on push to main, and deploys the 'dist' folder.
+# ======================================================================
 
+name: Deploy to Netlify
+
+# 🧯 Trigger this workflow when changes are pushed to the 'main' branch
 on:
   push:
     branches:
@@ -7,25 +13,26 @@ on:
 
 jobs:
   deploy:
+    # 🖥️ Runs the job on the latest Ubuntu runner provided by GitHub
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # -------------------------------------------
+      # 📥 Step 1: Checkout the repository contents
+      # -------------------------------------------
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install Netlify CLI
-        run: npm install netlify-cli -g
-
-      - name: Build (Optional)
-        run: echo "No build step needed for pure HTML/CSS site"
-
+      # ---------------------------------------------------------------------
+      # 🚀 Step 2: Deploy to Netlify using a community-maintained GitHub Action
+      # - Requires 'NETLIFY_AUTH_TOKEN' and 'NETLIFY_SITE_ID' secrets.
+      # - It deploys the contents of the ./dist folder to the production site.
+      # ---------------------------------------------------------------------
       - name: Deploy to Netlify
-        run: netlify deploy --prod --dir=./
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        uses: South-Paw/action-netlify-deploy@v1.2.0
+        with:
+          deploy-dir: ./                         # Directory with static site content
+          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }} # Auth token from Netlify
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}       # Site ID from Netlify
+          production-deploy: true                    # Deploy to production environment
+          publish-branch: main                       # Branch to deploy from
